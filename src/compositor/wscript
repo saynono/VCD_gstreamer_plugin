@@ -3,20 +3,21 @@
 
 def build(bld):
 	import os
-	bld(
-		features = ['c'],
-		includes = ['.', '../..', '../common'],
-		uselib = bld.env['COMMON_USELIB'] + ['GSTBACKPORT'],
-		use = ['gstimxcommon'],
-		name = 'gst_aggregator_backport',
-		source = bld.path.ant_glob('gst-backport/*.c'),
-		defines = ['HAVE_CONFIG_H']
-	)
+	# bld(
+	# 	features = ['c'],
+	# 	includes = ['.', '../..', '../common'],
+	# 	uselib = bld.env['COMMON_USELIB'] + ['GSTBACKPORT'],
+	# 	use = ['gstimxcommon'],
+	# 	name = 'gst_aggregator_backport',
+	# 	source = bld.path.ant_glob('gst-backport/*.c'),
+	# 	defines = ['HAVE_CONFIG_H']
+	# )
 	obj = bld(
 		features = ['c', bld.env['CLIBTYPE']],
 		includes = ['.', '../..', '../common'],
 		uselib = bld.env['COMMON_USELIB'],
-		use = ['gstimxcommon', 'gst_aggregator_backport'],
+		# use = ['gstimxcommon', 'gst_aggregator_backport'],
+		use = ['gstimxcommon'],
 		vnum = bld.env['GST_NONO_VCD_VERSION'],
 		target = 'gstnonovcd',
 		name = 'gstnonovcd',
