@@ -6,6 +6,31 @@
 #include "../common/phys_mem_meta.h"
 #include "../common/phys_mem_buffer_pool.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdarg.h>
+#include <string.h>
+#include <termios.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/ioctl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+
+
+#include <errno.h>
+#include <sys/ioctl.h>
+
+
+// new schtuff for custom baudrates!
+#ifdef __APPLE__
+#include <IOKit/serial/ioss.h>
+#endif
+
+#ifdef __linux__
+#include <linux/serial.h>
+#endif
 
 GST_DEBUG_CATEGORY_STATIC(imx_video_compositor_debug);
 #define GST_CAT_DEFAULT imx_video_compositor_debug
@@ -1092,4 +1117,179 @@ static void gst_imx_video_compositor_update_overall_region(GstImxVideoCompositor
 	}
 
 	compositor->overall_region_valid = TRUE;
+}
+
+/*
+ * serialOpen:
+ *	Open and initialise the serial port, setting all the right
+ *	port parameters - or as many as are required - hopefully!
+ *********************************************************************************
+ */
+
+static int openPort (const char *device, const int baud)
+{
+  struct termios options ;
+  speed_t myBaud = -1;
+  int     status;
+
+  switch (baud)
+  {
+    case     50:	myBaud =     B50 ; break ;
+    case     75:	myBaud =     B75 ; break ;
+    case    110:	myBaud =    B110 ; break ;
+    case    134:	myBaud =    B134 ; break ;
+    case    150:	myBaud =    B150 ; break ;
+    case    200:	myBaud =    B200 ; break ;
+    case    300:	myBaud =    B300 ; break ;
+    case    600:	myBaud =    B600 ; break ;
+    case   1200:	myBaud =   B1200 ; break ;
+    case   1800:	myBaud =   B1800 ; break ;
+    case   2400:	myBaud =   B2400 ; break ;
+    case   4800:	myBaud =   B4800 ; break ;
+    case   9600:	myBaud =   B9600 ; break ;
+    case  19200:	myBaud =  B19200 ; break ;
+    case  38400:	myBaud =  B38400 ; break ;
+    case  57600:	myBaud =  B57600 ; break ;
+    case 115200:	myBaud = B115200 ; break ;
+    case 230400:	myBaud = B230400 ; break ;
+#ifdef __linux__    
+    default:      myBaud = baud ; break;
+    // case 1000000:  myBaud = B1000000 ; break ;
+#endif
+
+    // default:
+    //   return -2 ;
+  }
+
+
+
+    // int success;
+
+    // fd = open(device, O_RDWR | O_NOCTTY | O_NONBLOCK);  
+    // if(fd == -1){  
+    //   printf("ofSerial: unable to open port");  
+    //   return false;  
+    // }  
+    //       // we want exclusive access, this is different  
+    // success = ioctl(fd, TIOCEXCL);  
+    // if(success != -1) {  
+    //   // this is also different  
+    //   success = fcntl(fd, F_SETFL, 0);  
+    // } else {  
+    //   printf("ofSerial: can't lock port :(");  
+    //   return false;  
+    // }  
+    //             if(success == -1) {  
+    //   printf("ofSerial: can't lock filedescriptor :(");  
+    //   return false;  
+    // }  
+
+    // // struct termios options;  
+    // success = tcgetattr(fd,&oldoptions);  
+    // if (success == -1) {  
+    //   printf("ofSerial: can't get old options");  
+    //   return false;  
+    // }  
+    // options = oldoptions;  
+    //             // NOTE: cfsetispeed & cfsetospeed switch statement omitted here for brevity  
+
+    // /*options.c_cflag |= (CLOCAL | CREAD);  
+    // options.c_cflag &= ~PARENB;  
+    // options.c_cflag &= ~CSTOPB;  
+    // options.c_cflag &= ~CSIZE;  
+    // options.c_cflag |= CS8;  
+
+    // cfmakeraw(&options);  
+
+    // // set tty attributes (raw-mode in this case)  
+    // success = tcsetattr(fd, TCSANOW, &options);  
+    // if (success == -1) {  
+    //   printf("ofSerial: can't set attibutes on port descriptor");  
+    //   return false;  
+    // }  
+    // speed_t speed = baud;
+    // success = ioctl(fd, IOSSIOSPEED, speed);  
+    // success = ioctl(fd, IOSSDATALAT, 3); // an arbitrary length of time to wait for the latency  
+
+
+
+
+
+
+
+
+  // if ((fd = open (device, O_RDWR | O_NONBLOCK)) == -1)
+  if ((fd = open (device, O_RDWR | O_NOCTTY | O_NDELAY | O_NONBLOCK)) == -1)
+    return -1 ;
+
+  // fcntl (fd, F_SETFL, O_RDWR) ;
+
+
+    // Get the current options and save them so we can restore the default settings later.
+  if (tcgetattr(fd, &oldoptions) == -1) {
+        printf("Error getting tty attributes %s(%d).\n", strerror(errno), errno);
+  }
+
+// Get and modify current options:
+  tcgetattr (fd, &options) ;
+
+    cfmakeraw   (&options) ;
+    cfsetispeed (&options, myBaud) ;
+    cfsetospeed (&options, myBaud) ;
+
+    options.c_cflag |= (CLOCAL | CREAD) ;
+    options.c_cflag &= ~PARENB ;
+    options.c_cflag &= ~CSTOPB ;
+    options.c_cflag &= ~CSIZE ;
+    options.c_cflag |= CS8 ;
+    options.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG) ;
+    options.c_oflag &= ~OPOST ;
+
+    options.c_cc [VMIN]  =   0 ;
+    options.c_cc [VTIME] = 100 ;	// Ten seconds (100 deciseconds)
+
+  tcsetattr (fd, TCSANOW | TCSAFLUSH, &options) ;
+
+  ioctl (fd, TIOCMGET, &status);
+
+  status |= TIOCM_DTR ;
+  status |= TIOCM_RTS ;
+
+  ioctl (fd, TIOCMSET, &status);
+
+  // int currentBaudbaudRate = (int) cfgetospeed(&options);
+  // printf("Output baud rate changed to %d\n", (int) cfgetospeed(&options));
+  
+  // On OS X, starting in Tiger, we can set a custom baud rate, as follows:
+
+  if ((int) cfgetospeed(&options) != baud) {
+
+    int res = setCustomBaudrate( baud );
+    if( res == 0 ){
+      myBaud = baud;
+      // printf("SUCCESS: Altered baudrate to %i.\n",baud);
+    }else{
+      printf("ERROR: Couldn't set baudrate to custom value %i.\n",baud);
+    }
+
+
+  }
+
+#ifdef __APPLE__
+  unsigned long mics = 1UL;
+  int success = ioctl(fd, IOSSDATALAT, &mics);
+  if( success < 0 ){
+    printf("Error Serial setting read latency %s - %s(%d).\n", device, strerror(errno), errno);
+  }
+#endif
+
+  std::string strName(device);
+  deviceName = strName;
+
+  if( fd == -1 ) printf("ERROR Connecting to Serial Device: %s.\n",device);
+  else printf("Connected to Serial Device: %s at %i baud\n",device,(int)myBaud);
+
+  usleep (10000) ;	// 10mS
+
+  return fd ;
 }
