@@ -987,8 +987,6 @@ static GstBufferPool* gst_imx_video_compositor_create_bufferpool(GstImxVideoComp
 	GstStructure *config;
 	GstImxVideoCompositorClass *klass;
 
-	la;
-
 	g_assert(compositor != NULL);
 	klass = GST_IMX_VIDEO_COMPOSITOR_CLASS(G_OBJECT_GET_CLASS(compositor));
 
