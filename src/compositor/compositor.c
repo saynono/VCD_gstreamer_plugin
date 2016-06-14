@@ -1126,11 +1126,15 @@ static void gst_imx_video_compositor_update_overall_region(GstImxVideoCompositor
  *********************************************************************************
  */
 
+static struct termios oldoptions;
+
+
 static int openPort (const char *device, const int baud)
 {
   struct termios options ;
   speed_t myBaud = -1;
   int     status;
+  int fd;
 
   switch (baud)
   {
@@ -1160,63 +1164,6 @@ static int openPort (const char *device, const int baud)
     // default:
     //   return -2 ;
   }
-
-
-
-    // int success;
-
-    // fd = open(device, O_RDWR | O_NOCTTY | O_NONBLOCK);  
-    // if(fd == -1){  
-    //   printf("ofSerial: unable to open port");  
-    //   return false;  
-    // }  
-    //       // we want exclusive access, this is different  
-    // success = ioctl(fd, TIOCEXCL);  
-    // if(success != -1) {  
-    //   // this is also different  
-    //   success = fcntl(fd, F_SETFL, 0);  
-    // } else {  
-    //   printf("ofSerial: can't lock port :(");  
-    //   return false;  
-    // }  
-    //             if(success == -1) {  
-    //   printf("ofSerial: can't lock filedescriptor :(");  
-    //   return false;  
-    // }  
-
-    // // struct termios options;  
-    // success = tcgetattr(fd,&oldoptions);  
-    // if (success == -1) {  
-    //   printf("ofSerial: can't get old options");  
-    //   return false;  
-    // }  
-    // options = oldoptions;  
-    //             // NOTE: cfsetispeed & cfsetospeed switch statement omitted here for brevity  
-
-    // /*options.c_cflag |= (CLOCAL | CREAD);  
-    // options.c_cflag &= ~PARENB;  
-    // options.c_cflag &= ~CSTOPB;  
-    // options.c_cflag &= ~CSIZE;  
-    // options.c_cflag |= CS8;  
-
-    // cfmakeraw(&options);  
-
-    // // set tty attributes (raw-mode in this case)  
-    // success = tcsetattr(fd, TCSANOW, &options);  
-    // if (success == -1) {  
-    //   printf("ofSerial: can't set attibutes on port descriptor");  
-    //   return false;  
-    // }  
-    // speed_t speed = baud;
-    // success = ioctl(fd, IOSSIOSPEED, speed);  
-    // success = ioctl(fd, IOSSDATALAT, 3); // an arbitrary length of time to wait for the latency  
-
-
-
-
-
-
-
 
   // if ((fd = open (device, O_RDWR | O_NONBLOCK)) == -1)
   if ((fd = open (device, O_RDWR | O_NOCTTY | O_NDELAY | O_NONBLOCK)) == -1)
@@ -1264,13 +1211,13 @@ static int openPort (const char *device, const int baud)
 
   if ((int) cfgetospeed(&options) != baud) {
 
-    int res = setCustomBaudrate( baud );
-    if( res == 0 ){
-      myBaud = baud;
-      // printf("SUCCESS: Altered baudrate to %i.\n",baud);
-    }else{
+    // int res = setCustomBaudrate( baud );
+    // if( res == 0 ){
+    //   myBaud = baud;
+    //   // printf("SUCCESS: Altered baudrate to %i.\n",baud);
+    // }else{
       printf("ERROR: Couldn't set baudrate to custom value %i.\n",baud);
-    }
+    // }
 
 
   }
@@ -1283,8 +1230,8 @@ static int openPort (const char *device, const int baud)
   }
 #endif
 
-  std::string strName(device);
-  deviceName = strName;
+  // std::string strName(device);
+  // deviceName = strName;
 
   if( fd == -1 ) printf("ERROR Connecting to Serial Device: %s.\n",device);
   else printf("Connected to Serial Device: %s at %i baud\n",device,(int)myBaud);
