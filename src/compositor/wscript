@@ -22,8 +22,7 @@ def build(bld):
 		target = 'gstnonovcd-1',
 		name = 'gstnonovcd',
 		source = bld.path.ant_glob('*.c'),
-		defines = ['HAVE_CONFIG_H'],
-		install_path = bld.env['PLUGIN_INSTALL_PATH']
+		defines = ['HAVE_CONFIG_H']
 	)
 	if bld.env['BUILD_FOR_ANDROID']:
 		obj.install_path = os.path.join(bld.env['PREFIX'], 'lib')
