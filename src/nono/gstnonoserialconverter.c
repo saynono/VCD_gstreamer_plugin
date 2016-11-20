@@ -397,7 +397,7 @@ plugin_init (GstPlugin * plugin)
    remove these, as they're always defined.  Otherwise, edit as
    appropriate for your external plugin package. */
 #ifndef VERSION
-#define VERSION "0.0.1"
+#define VERSION "0.0.2"
 #endif
 #ifndef PACKAGE
 #define PACKAGE "nono"
@@ -406,7 +406,7 @@ plugin_init (GstPlugin * plugin)
 #define PACKAGE_NAME "nono_SerialConverter"
 #endif
 #ifndef GST_PACKAGE_ORIGIN
-#define GST_PACKAGE_ORIGIN "http://say-nono.com"
+#define GST_PACKAGE_ORIGIN "https://say-nono.com"
 #endif
 
 GST_PLUGIN_DEFINE (GST_VERSION_MAJOR,
