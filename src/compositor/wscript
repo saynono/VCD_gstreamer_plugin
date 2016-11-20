@@ -16,7 +16,7 @@ def build(bld):
 		features = ['c', bld.env['CLIBTYPE']],
 		includes = ['.', '../..', '../common'],
 		uselib = bld.env['COMMON_USELIB'],
-		# use = ['gstimxcommon', 'gst_aggregator_backport'],
+		use = ['gstimxcommon', 'gst_aggregator_backport'],
 		use = ['gstimxcommon'],
 		vnum = bld.env['GST_NONO_VCD_VERSION'],
 		target = 'gstnonovcd-1',
