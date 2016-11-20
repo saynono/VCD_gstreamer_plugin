@@ -9,6 +9,11 @@ This is a plugin for the VCD project [GStreamer 1.0](http://gstreamer.freedeskto
 This software is only being tested with the i.MX6 SoC families.
 
 
+Run:
+
+gst-launch-1.0 videotestsrc ! nonoserialconverter ! autovideosink
+
+
 License
 -------
 
