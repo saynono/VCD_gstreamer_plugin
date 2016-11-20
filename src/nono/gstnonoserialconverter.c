@@ -412,6 +412,6 @@ plugin_init (GstPlugin * plugin)
 GST_PLUGIN_DEFINE (GST_VERSION_MAJOR,
     GST_VERSION_MINOR,
     nonoserialconverter,
-    "This is a plugin that will convert Video to a Serial Data Stream.",
+    "This is a plugin that will convert Video to a Serial Data Stream. by nono",
     plugin_init, VERSION, "LGPL", PACKAGE_NAME, GST_PACKAGE_ORIGIN)
 
