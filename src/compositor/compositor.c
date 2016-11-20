@@ -1132,7 +1132,7 @@ static struct termios oldoptions;
 static int openPort (const char *device, const int baud)
 {
 
-	gprint("hallo nono\n");
+	gprint("hallo nono\nOpen the port!");
   struct termios options ;
   speed_t myBaud = -1;
   int     status;
