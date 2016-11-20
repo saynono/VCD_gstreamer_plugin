@@ -1369,13 +1369,13 @@ gst_imxbp_videoaggregator_aggregate (GstImxBPAggregator * agg, gboolean timeout)
     goto unlock_and_return;
   }
 
-  // GST_DEBUG_OBJECT (vagg,
-  //     "Producing buffer for %" GST_TIME_FORMAT " to %" GST_TIME_FORMAT
-  //     ", running time start %" GST_TIME_FORMAT ", running time end %"
-  //     GST_TIME_FORMAT, GST_TIME_ARGS (output_start_time),
-  //     GST_TIME_ARGS (output_end_time),
-  //     GST_TIME_ARGS (output_start_running_time),
-  //     GST_TIME_ARGS (output_end_running_time));
+  GST_DEBUG_OBJECT (vagg,
+      "Producing buffer for %" GST_TIME_FORMAT " to %" GST_TIME_FORMAT
+      ", running time start %" GST_TIME_FORMAT ", running time end %"
+      GST_TIME_FORMAT, GST_TIME_ARGS (output_start_time),
+      GST_TIME_ARGS (output_end_time),
+      GST_TIME_ARGS (output_start_running_time),
+      GST_TIME_ARGS (output_end_running_time));
 
   jitter = gst_imxbp_videoaggregator_do_qos (vagg, output_start_time);
   if (jitter <= 0) {
