@@ -1374,7 +1374,10 @@ gst_imxbp_aggregator_query_latency_unlocked (GstImxBPAggregator * self, GstQuery
   our_latency = self->priv->latency;
 
   if (G_UNLIKELY (!GST_CLOCK_TIME_IS_VALID (min))) {
+
 // TODO nono: this cause some problems. to lazy to try and figure out what it is.
+    GST_ERROR_OBJECT (self, "Invalid minimum latency %" GST_TIME_FORMAT
+        ". Please file a bug.", GST_TIME_ARGS (min));
     // GST_ERROR_OBJECT (self, "Invalid minimum latency %" GST_TIME_FORMAT
     //     ". Please file a bug at " PACKAGE_BUGREPORT ".", GST_TIME_ARGS (min));
     return FALSE;
