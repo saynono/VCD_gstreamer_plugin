@@ -3,15 +3,15 @@
 
 def build(bld):
 	import os
-	# bld(
-	# 	features = ['c'],
-	# 	includes = ['.', '../..', '../common'],
-	# 	uselib = bld.env['COMMON_USELIB'] + ['GSTBACKPORT'],
-	# 	use = ['gstimxcommon'],
-	# 	name = 'gst_aggregator_backport',
-	# 	source = bld.path.ant_glob('gst-backport/*.c'),
-	# 	defines = ['HAVE_CONFIG_H']
-	# )
+	bld(
+		features = ['c'],
+		includes = ['.', '../..', '../common'],
+		uselib = bld.env['COMMON_USELIB'] + ['GSTBACKPORT'],
+		use = ['gstimxcommon'],
+		name = 'gst_aggregator_backport',
+		source = bld.path.ant_glob('gst-backport/*.c'),
+		defines = ['HAVE_CONFIG_H']
+	)
 	obj = bld(
 		features = ['c', bld.env['CLIBTYPE']],
 		includes = ['.', '../..', '../common'],
@@ -22,7 +22,8 @@ def build(bld):
 		target = 'gstnonovcd-1',
 		name = 'gstnonovcd',
 		source = bld.path.ant_glob('*.c'),
-		defines = ['HAVE_CONFIG_H']
+		defines = ['HAVE_CONFIG_H'],
+		install_path = bld.env['PLUGIN_INSTALL_PATH']
 	)
 	if bld.env['BUILD_FOR_ANDROID']:
 		obj.install_path = os.path.join(bld.env['PREFIX'], 'lib')
