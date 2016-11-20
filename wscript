@@ -203,6 +203,7 @@ def configure(conf):
 
 
 def build(bld):
-	bld.recurse('src/common')
-	bld.recurse('src/compositor')
+	# bld.recurse('src/common')
+	# bld.recurse('src/compositor')
+	bld.recurse('src/nono')
 
