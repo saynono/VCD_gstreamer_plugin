@@ -296,7 +296,8 @@ gst_nono_temp_transform (GstVideoFilter * filter,
 
   // width = GST_VIDEO_FRAME_WIDTH (frame);
   width = 30;
-  height = GST_VIDEO_FRAME_HEIGHT (frame);
+  // height = GST_VIDEO_FRAME_HEIGHT (frame);
+  height = 400;
 
   row_stride = GST_VIDEO_FRAME_PLANE_STRIDE (frame, 0);
   pixel_stride = GST_VIDEO_FRAME_COMP_PSTRIDE (frame, 0);
@@ -345,6 +346,7 @@ gst_nono_prepare_data
   row_stride = GST_VIDEO_FRAME_PLANE_STRIDE (frame, 0);
   pixel_stride = GST_VIDEO_FRAME_COMP_PSTRIDE (frame, 0);
 
+/*
 
   guint8 *dataBuffer = nonoserialconverter->dataBuffer;
   gint dataBufferSize = nonoserialconverter->dataBufferSize;
@@ -359,7 +361,8 @@ gst_nono_prepare_data
     pos = px*pixel_stride + py*row_stride;
     dataBuffer[i] = data[pos] & 0xff;
   }
-
+*/
+  
 }
 
 static GstFlowReturn
