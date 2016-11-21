@@ -362,7 +362,7 @@ gst_nono_prepare_data
     dataBuffer[i] = data[pos] & 0xff;
   }
 */
-  
+
 }
 
 static GstFlowReturn
@@ -373,7 +373,7 @@ gst_nonoserialconverter_transform_frame_ip (GstVideoFilter * filter, GstVideoFra
   GST_DEBUG_OBJECT (nonoserialconverter, "transform_frame_ip");
   // gst_nono_temp_transform( filter, frame, nonoserialconverter->dataBuffer[10] );
 
-  gst_nono_temp_transform( filter, frame, nonoserialconverter );
+  // gst_nono_temp_transform( filter, frame, nonoserialconverter );
   gst_nono_prepare_data( filter, frame, nonoserialconverter );
   // g_print(" FRAME #%i => %X\n",nonoserialconverter->frameNum, nonoserialconverter->dataBuffer[10] );
   if( nonoserialconverter->fd >= 0 ){
