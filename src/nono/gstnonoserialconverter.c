@@ -294,7 +294,8 @@ gst_nono_temp_transform (GstVideoFilter * filter,
   offsets[1] = GST_VIDEO_FRAME_COMP_POFFSET (frame, 1);
   offsets[2] = GST_VIDEO_FRAME_COMP_POFFSET (frame, 2);
 
-  width = GST_VIDEO_FRAME_WIDTH (frame);
+  // width = GST_VIDEO_FRAME_WIDTH (frame);
+  width = 30;
   height = GST_VIDEO_FRAME_HEIGHT (frame);
 
   row_stride = GST_VIDEO_FRAME_PLANE_STRIDE (frame, 0);
