@@ -195,7 +195,7 @@ def configure(conf):
 	conf.env['COMMON_USELIB'] = ['GSTREAMER', 'GSTREAMER_BASE', 'GSTREAMER_AUDIO', 'GSTREAMER_VIDEO', 'PTHREAD', 'M']
 
 
-	conf.recurse('src/common')
+	# conf.recurse('src/common')
 
 
 	conf.write_config_header('config.h')
