@@ -307,7 +307,7 @@ gst_nono_temp_transform (GstVideoFilter * filter,
       // g = data[offsets[1]];
       // b = data[offsets[2]];
       // r = (int)(clrVal+i+((sin((double)j*.01+(nonoserialconverter->frameNum+j*.2)*.1)+1)*50)) % 0xff;
-      r = (int)(clrVal+i+((sin((double)j*.01+(nonoserialconverter->frameNum+j*.2)*.1)+1)*50)) % 0xff;
+      r = (clrVal+i) % 0xff;
       // g = r;
       // b = g;
       data[offsets[0]] = r;
