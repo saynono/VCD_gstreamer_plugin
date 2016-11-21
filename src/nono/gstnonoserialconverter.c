@@ -309,7 +309,7 @@ gst_nono_temp_transform (GstVideoFilter * filter,
       // g = data[offsets[1]];
       // b = data[offsets[2]];
       // r = (int)(clrVal+i+((sin((double)j*.01+(nonoserialconverter->frameNum+j*.2)*.1)+1)*50)) % 0xff;
-      r = (clrVal+i) % 0xff;
+      // r = (clrVal+i) % 0xff;
       // g = r;
       // b = g;
       data[offsets[0]] = r;
@@ -346,7 +346,7 @@ gst_nono_prepare_data
   row_stride = GST_VIDEO_FRAME_PLANE_STRIDE (frame, 0);
   pixel_stride = GST_VIDEO_FRAME_COMP_PSTRIDE (frame, 0);
 
-/*
+
 
   guint8 *dataBuffer = nonoserialconverter->dataBuffer;
   gint dataBufferSize = nonoserialconverter->dataBufferSize;
@@ -361,7 +361,7 @@ gst_nono_prepare_data
     pos = px*pixel_stride + py*row_stride;
     dataBuffer[i] = data[pos] & 0xff;
   }
-*/
+
 
 }
 
