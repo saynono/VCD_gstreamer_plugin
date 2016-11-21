@@ -150,7 +150,7 @@ gst_nonoserialconverter_class_init (GstNonoSerialConverterClass * klass)
 static void
 gst_nonoserialconverter_init (GstNonoSerialConverter *nonoserialconverter)
 {
-  const char* device = "/dev/ttyUSB3";
+  const char* device = "/dev/ttyUSB0";
   nonoserialconverter->frameNum = 0;
   nonoserialconverter->dataBufferSize = NUM_ELEMENTS_TOTAL;
   nonoserialconverter->serialBufferSize = DATA_BUFFER_SERIAL_OUT_SIZE;
@@ -284,7 +284,7 @@ gst_nono_temp_transform (GstVideoFilter * filter,
   gint i, j;
   gint width, height;
   gint pixel_stride, row_stride, row_wrap;
-  gint r, g, b;
+  gint r;//, g, b;
   // gint y, u, v;
   gint offsets[3];
   guint8 *data;
@@ -304,14 +304,15 @@ gst_nono_temp_transform (GstVideoFilter * filter,
   for (i = 0; i < height; i++) {
     for (j = 0; j < width; j++) {
       r = 0xff - data[offsets[0]];
-      g = data[offsets[1]];
-      b = data[offsets[2]];
+      // g = data[offsets[1]];
+      // b = data[offsets[2]];
+      // r = (int)(clrVal+i+((sin((double)j*.01+(nonoserialconverter->frameNum+j*.2)*.1)+1)*50)) % 0xff;
       r = (int)(clrVal+i+((sin((double)j*.01+(nonoserialconverter->frameNum+j*.2)*.1)+1)*50)) % 0xff;
-      g = r;
-      b = g;
+      // g = r;
+      // b = g;
       data[offsets[0]] = r;
-      data[offsets[1]] = g;
-      data[offsets[2]] = b;
+      // data[offsets[1]] = g;
+      // data[offsets[2]] = b;
       data += pixel_stride;
       // if( i == height -1 && j == width - 1 ){
       //   g_print (" RGB:[ %X , %X , %X ] \n",r,g,b);

@@ -110,7 +110,6 @@ static int nono_serial_openPort (const char *device, const int baud)
 #endif
 
   }
-  g_print("all shit");
   if ((fd = open (device, O_RDWR | O_NOCTTY | O_NDELAY | O_NONBLOCK)) == -1){
     g_print("ERROR Opening SerialPort ---- %s at %i\n",device, baud);
     return -1 ;
