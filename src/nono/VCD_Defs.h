@@ -20,6 +20,10 @@ typedef uint8_t uint8;
 
 
 #define NUM_SECTIONS                    43
+#define NUM_SECTION_1                   13
+#define NUM_SECTION_2                   13
+#define NUM_SECTION_3                   9
+#define NUM_SECTION_4                   2
 #define NUM_STRANDS_PER_SECTIONS        10
 #define NUM_ELEMENTS_PER_STRAND         5
 #define NUM_ELEMENTS_TOTAL              NUM_SECTIONS * NUM_STRANDS_PER_SECTIONS * NUM_ELEMENTS_PER_STRAND

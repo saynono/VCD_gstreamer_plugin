@@ -150,11 +150,17 @@ gst_nonoserialconverter_class_init (GstNonoSerialConverterClass * klass)
 static void
 gst_nonoserialconverter_init (GstNonoSerialConverter *nonoserialconverter)
 {
-  const char* device = "/dev/ttyUSB0";
+  const char* device1 = "/dev/ttyUSB0";
+  const char* device2 = "/dev/ttyUSB1";
+  const char* device3 = "/dev/ttyUSB2";
+  const char* device4 = "/dev/ttyUSB3";
   nonoserialconverter->frameNum = 0;
   nonoserialconverter->dataBufferSize = NUM_ELEMENTS_TOTAL;
   nonoserialconverter->serialBufferSize = DATA_BUFFER_SERIAL_OUT_SIZE;
-  nonoserialconverter->fd = nono_serial_openPort( device, SERIAL_BAUDRATE );
+  nonoserialconverter->fd1 = nono_serial_openPort( device1, SERIAL_BAUDRATE );
+  nonoserialconverter->fd2 = nono_serial_openPort( device2, SERIAL_BAUDRATE );
+  nonoserialconverter->fd3 = nono_serial_openPort( device3, SERIAL_BAUDRATE );
+  nonoserialconverter->fd4 = nono_serial_openPort( device4, SERIAL_BAUDRATE );
   // nonoserialconverter->fd = nono_serial_openPort( device, 115200 );
   //allocate the memory for the array
   nonoserialconverter->dataBuffer = (guint8*)calloc( nonoserialconverter->dataBufferSize, sizeof(guint8));
@@ -163,7 +169,10 @@ gst_nonoserialconverter_init (GstNonoSerialConverter *nonoserialconverter)
   memset(nonoserialconverter->dataBuffer,0,nonoserialconverter->dataBufferSize);
   memset(nonoserialconverter->serialBuffer,0,nonoserialconverter->serialBufferSize);
 
-  g_print("Opened Port %s with FD: %i\n", device, nonoserialconverter->fd );
+  g_print("Opened Port %s with FD: %i\n", device1, nonoserialconverter->fd1 );
+  g_print("Opened Port %s with FD: %i\n", device2, nonoserialconverter->fd2 );
+  g_print("Opened Port %s with FD: %i\n", device3, nonoserialconverter->fd3 );
+  g_print("Opened Port %s with FD: %i\n", device4, nonoserialconverter->fd4 );
   g_print("---- nothing ---- %p\n",nono_serial_openPort);
 
   nono_vcd_serial_init();
@@ -207,14 +216,26 @@ gst_nonoserialconverter_dispose (GObject * object)
   GST_DEBUG_OBJECT (nonoserialconverter, "dispose");
 
   /* clean up as possible.  may be called multiple times */
-  if( nonoserialconverter->fd >= 0 ){
-    nono_serial_closePort( nonoserialconverter->fd );    
+  if( nonoserialconverter->fd1 >= 0 ){
+    nono_serial_closePort( nonoserialconverter->fd1 );    
+  }
+  if( nonoserialconverter->fd2 >= 0 ){
+    nono_serial_closePort( nonoserialconverter->fd2 );    
+  }
+  if( nonoserialconverter->fd3 >= 0 ){
+    nono_serial_closePort( nonoserialconverter->fd3 );    
+  }
+  if( nonoserialconverter->fd4 >= 0 ){
+    nono_serial_closePort( nonoserialconverter->fd4 );    
   }
 
   //free the memory associated with the dynamic array
   free( nonoserialconverter->dataBuffer );
 
-  g_print("Closed Serial Port with FD: %i\n", nonoserialconverter->fd );
+  g_print("Closed Serial Port with FD: %i\n", nonoserialconverter->fd1 );
+  g_print("Closed Serial Port with FD: %i\n", nonoserialconverter->fd2 );
+  g_print("Closed Serial Port with FD: %i\n", nonoserialconverter->fd3 );
+  g_print("Closed Serial Port with FD: %i\n", nonoserialconverter->fd4 );
 
 
   G_OBJECT_CLASS (gst_nonoserialconverter_parent_class)->dispose (object);
@@ -376,8 +397,8 @@ gst_nonoserialconverter_transform_frame_ip (GstVideoFilter * filter, GstVideoFra
   // gst_nono_temp_transform( filter, frame, nonoserialconverter );
   gst_nono_prepare_data( filter, frame, nonoserialconverter );
   // g_print(" FRAME #%i => %X\n",nonoserialconverter->frameNum, nonoserialconverter->dataBuffer[10] );
-  if( nonoserialconverter->fd >= 0 ){
-    nono_vcd_serial_sendFrame( nonoserialconverter->fd, nonoserialconverter->dataBuffer, nonoserialconverter->dataBufferSize, nonoserialconverter->serialBuffer, nonoserialconverter->serialBufferSize );
+  if( nonoserialconverter->fd1 >= 0 ){
+    nono_vcd_serial_sendFrame( nonoserialconverter, nonoserialconverter->dataBuffer, nonoserialconverter->dataBufferSize, nonoserialconverter->serialBuffer, nonoserialconverter->serialBufferSize );
     // nono_serial_writeByte( nonoserialconverter->fd, 'c' );
 
     // nono_serial_testSendToSerial( nonoserialconverter->fd, nonoserialconverter->dataBuffer, nonoserialconverter->dataBufferSize, nonoserialconverter->frameNum );

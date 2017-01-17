@@ -37,7 +37,10 @@ typedef struct _GstNonoSerialConverterClass GstNonoSerialConverterClass;
 struct _GstNonoSerialConverter
 {
   GstVideoFilter base_nonoserialconverter;
-  gint fd;
+  gint fd1;
+  gint fd2;
+  gint fd3;
+  gint fd4;
   gboolean enabled;
   gint frameNum;
   guint8* dataBuffer;

@@ -32,7 +32,7 @@
 
 static void nono_vcd_serial_init();
 
-static void nono_vcd_serial_sendFrame( int fd, uint8* dataBuffer, int dataBufferSize, uint8* serialBuffer, int serialBufferSize );
+static void nono_vcd_serial_sendFrame( GstNonoSerialConverter *nonoserialconverter, uint8* dataBuffer, int dataBufferSize, uint8* serialBuffer, int serialBufferSize );
 static void nono_vcd_serial_sendDataToSection( int fd, int splitterID, uint8* data, int lenDataSection, uint8* serialBuffer, int serialBufferSize );
 static bool nono_vcd_serial_sendData( int fd, uint8* serialBuffer, int serialBufferSize );
 
@@ -41,13 +41,26 @@ static void nono_vcd_serial_init(){
 }
 
 
-static void nono_vcd_serial_sendFrame( int fd, uint8* dataBuffer, int dataBufferSize, uint8* serialBuffer, int serialBufferSize ){
+static void nono_vcd_serial_sendFrame( GstNonoSerialConverter *nonoserialconverter, uint8* dataBuffer, int dataBufferSize, uint8* serialBuffer, int serialBufferSize ){
 
   int numSections = dataBufferSize/(NUM_ELEMENTS_PER_STRAND * NUM_STRANDS_PER_SECTIONS);
-  int lenDataSection = NUM_ELEMENTS_PER_STRAND * NUM_STRANDS_PER_SECTIONS;
-            
-  for( int i=0;i<numSections;i++ ){
-    nono_vcd_serial_sendDataToSection( fd, (i+1), dataBuffer+(lenDataSection*i), lenDataSection, serialBuffer, serialBufferSize);
+  int lenDataSection = NUM_ELEMENTS_PER_STRAND * NUM_STRANDS_PER_SECTIONS; // 50
+          
+  // port 1  
+  for( int i=0;i<NUM_SECTION_1;i++ ){
+    nono_vcd_serial_sendDataToSection( nonoserialconverter->fd1, (i+1), dataBuffer+(lenDataSection*i), lenDataSection, serialBuffer, serialBufferSize);
+  }
+  // port 2  
+  for( int i=0;i<NUM_SECTION_2;i++ ){
+    nono_vcd_serial_sendDataToSection( nonoserialconverter->fd2, (i+14), dataBuffer+(lenDataSection*(i+NUM_SECTION_1)), lenDataSection, serialBuffer, serialBufferSize);
+  }
+  // port 3  
+  for( int i=0;i<NUM_SECTION_3;i++ ){
+    nono_vcd_serial_sendDataToSection( nonoserialconverter->fd3, (i+1), dataBuffer+(lenDataSection*(i+NUM_SECTION_1+NUM_SECTION_2)), lenDataSection, serialBuffer, serialBufferSize);
+  }
+  // port 4 
+  for( int i=0;i<NUM_SECTION_4;i++ ){
+    nono_vcd_serial_sendDataToSection( nonoserialconverter->fd4, (i+1), dataBuffer+(lenDataSection*(i+NUM_SECTION_1+NUM_SECTION_2+NUM_SECTION_3)), lenDataSection, serialBuffer, serialBufferSize);
   }
 
 }
