@@ -35,6 +35,7 @@ static void nono_vcd_serial_init();
 static void nono_vcd_serial_sendFrame( GstNonoSerialConverter *nonoserialconverter, uint8* dataBuffer, int dataBufferSize, uint8* serialBuffer, int serialBufferSize );
 static void nono_vcd_serial_sendDataToSection( int fd, int splitterID, uint8* data, int lenDataSection, uint8* serialBuffer, int serialBufferSize );
 static bool nono_vcd_serial_sendData( int fd, uint8* serialBuffer, int serialBufferSize );
+static void printHex( unsigned char* buf , int len );
 
 static void nono_vcd_serial_init(){
     
@@ -105,6 +106,8 @@ static void nono_vcd_serial_sendDataToSection( int fd, int splitterID, uint8* da
       serialBuffer[pos++] = dataBuffer[i];
     }
     nono_vcd_serial_sendData( fd, serialBuffer, pos );
+    g_print("Sending Serial Data:\n");
+    printHex(serialBuffer, serialBufferSize);
     
 //    if( splitterID == 1 ){
 //        printHex(serialBuffer, pos);
@@ -119,6 +122,15 @@ static bool nono_vcd_serial_sendData( int fd, uint8* serialBuffer, int serialBuf
   return res;
 }
 
+static void printHex( unsigned char* buf , int len ){
+  g_print("HEX : \n");
+  for( int i=0;i<len;i++ ){
+    g_print("%02X", buf[i] );
+    if( i%4==3 ) printf(" ");
+    if( i%48==47 ) printf("\n");
+  }
+  g_print("\n------------------------\n");
+}
 
 
 #endif // _GST_NONOVCDSERIAL_H_
